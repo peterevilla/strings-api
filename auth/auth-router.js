@@ -32,7 +32,6 @@ router.post("/register", validation, (req, res) => {
 });
 
 router.post("/login", validation, (req, res) => {
-  
   const { username, password } = req.body;
 
   if (isValid(req.body)) {
@@ -41,8 +40,11 @@ router.post("/login", validation, (req, res) => {
         if (user && bcryptjs.compareSync(password, user.password)) {
           const token = generateToken(user);
           res.status(200).json({
-            message: "Welcome to Family Recipe API",
-            token,
+            message: `Welcome to Family Recipe ${user.name}`,
+              id: user.id,
+              name: user.name,
+              username: user.username,
+              token,
           });
         } else {
           res.status(401).json({ message: "Invalid credentials" });
