@@ -20,6 +20,7 @@ function getUserRecipes(id) {
     return db('recipes').where({user_id: id});
   }
 
+
 async function add(user) {
   const [id] = await db("users").insert(user, "id");
 
