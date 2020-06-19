@@ -31,7 +31,17 @@ exports.seed = function(knex) {
          img_url: 'https://images.pexels.com/photos/2456435/pexels-photo-2456435.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
          user_id: 2,
          private: false
+        },
+        {title: 'Secret Garlic Dressing',
+         ingredients:'3 Garlics, 1 cup of Mayo, Cilantro', 
+         instructions: 'My secret garlic sauce great for everything. Put all the ingredients in a Blender for one minute then serve',
+         category: 'Dressing',
+         source: 'Me',
+         img_url: 'https://images.pexels.com/photos/1392585/pexels-photo-1392585.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+         user_id: 2,
+         private: true
         }
+
 
       ]);
     });

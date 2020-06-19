@@ -1,7 +1,6 @@
 const express = require("express");
 const Recipes = require("./recipes-model");
 const router = express.Router();
-const restricted = require("../auth/aunthenticate-middleware");
 
 //GET ALL RECIPES
 router.get("/", (req, res) => {
@@ -14,10 +13,10 @@ router.get("/", (req, res) => {
         res.json(publicRecipes);
       } else {
         const publicRecipes = recipes.filter((recipe) => recipe.private !== 1);
-        const privateRecipes = recipes.filter(
-          (recipe) => recipe.user_id !== userId
-        );
-        const allRecipes = {...publicRecipes, ...privateRecipes };
+        const privateRecipes = recipes.filter((recipe) => {
+          return recipe.user_id === Number(userId) && recipe.private === 1;
+        });
+        const allRecipes = [...publicRecipes, ...privateRecipes];
         res.json(allRecipes);
       }
     })
@@ -30,11 +29,7 @@ router.get("/:id", (req, res) => {
   const { id } = req.params;
   Recipes.findById(id)
     .then((recipe) => {
-      if (recipe.private !== 1) {
-        res.status(201).json(recipe);
-      } else {
-        res.json({ message: "This Recipe is Private" });
-      }
+      res.status(201).json(recipe);
     })
     .catch((err) => {
       res.status(500).json({ message: "error" });
@@ -42,9 +37,11 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  Recipes.add(req.body)
-    .then((recipes) => {
-      res.status(201).json({ message: "New recipe Added!" });
+    const userId = req.headers.user_id;
+    const body = {...req.body, user_id: userId }
+  Recipes.add(body)
+    .then((recipe) => {
+      res.status(201).json({ message: "New recipe Added!", recipe });
     })
     .catch((err) => {
       console.log(err);
@@ -53,55 +50,36 @@ router.post("/", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-  Recipes.findById(req.params.id)
+  Recipes.remove(req.params.id)
     .then((recipe) => {
-      if (recipe.private !== 1) {
-        Recipes.remove(req.params.id)
-          .then((recipe) => {
-            res.status(201).json({ message: "Recipe was deleted" });
-          })
-          .catch((err) => {
-            res.status(500).json({ message: "Error deleting" });
-          });
-      } else {
-        res.json({
-          message: "You are not aloww to delete, this Recipe is Private",
-        });
-      }
+      res.status(201).json({ message: "Recipe was deleted" });
     })
     .catch((err) => {
-      res.status(500).json({ message: "error" });
+      res.status(500).json({ message: "Error deleting" });
     });
 });
 
 router.put("/:id", (req, res) => {
-  Recipes.findById(req.params.id)
-    .then((recipe) => {
-      if (recipe.private !== 1) {
-        Recipes.update(req.params.id, req.body)
-          .where((recipe) => {
-            res.status(201).json({ message: "Recipe was updated" });
-          })
-          .catch((error) => {
-            res.status(500).json({ message: "error" });
-          });
-      } else {
-        res.json({
-          message: "You are not aloww to edit, this Recipe is Private",
+  const { id } = req.params;
+  const userId = req.headers.user_id;
+    const body = {...req.body, user_id: userId }
+  Recipes.update(id, body)
+    .then((response) => {
+      Recipes.findById(id)
+        .then((recipe) => {
+          res
+            .status(200)
+            .json({ message: "Recipe successfully updated", recipe });
+        })
+        .catch((err) => {
+          res
+            .status(404)
+            .json({ message: "An recipe with that id does not exist" });
         });
-      }
     })
     .catch((err) => {
-      res.status(500).json({ message: "error" });
+      res.status(500).json({ message: "Could not update recipe" });
     });
 });
-
-function validatePrivacy(req, res, next) {
-  if (!req.body.username || !req.body.password) {
-    res.send({ error: "Must provide username and password" });
-  } else {
-    next();
-  }
-}
 
 module.exports = router;
