@@ -17,22 +17,22 @@ module.exports = {
         conn.run('PRAGMA foreign_keys = ON', done); // turn on FK enforcement
       },
   },
-}
+},
   
-  // production: {
-  //   client: 'pg',
-  //   connection: process.env.DB_URL,
-  //   useNullAsDefault: true,
-  //   pool: {
-  //     min: 2,
-  //     max: 100
-  //   },
-  //   migrations: {
-  //     tableName: './database/migrations'
-  //   },
-  //   seeds: {
-  //     directory: './database/seeds'
-  //   }
-  // }
+  production: {
+    client: 'pg',
+    connection: process.env.DB_URL,
+    useNullAsDefault: true,
+    pool: {
+      min: 2,
+      max: 100
+    },
+    migrations: {
+      tableName: './database/migrations'
+    },
+    seeds: {
+      directory: './database/seeds'
+    }
+  }
 
 }
