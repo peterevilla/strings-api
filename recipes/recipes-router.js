@@ -50,13 +50,29 @@ router.post("/", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-  Recipes.remove(req.params.id)
+  const { id } = req.params;
+  const userId = req.headers.user_id;
+  Recipes.findById(id)
     .then((recipe) => {
-      res.status(201).json({ message: "Recipe was deleted" });
+        if(recipe.user_id === Number(userId)) {
+          Recipes.remove(req.params.id)
+          .then((recipe) => {
+            res.status(201).json({ message: "Recipe was deleted" });
+          })
+          .catch((err) => {
+            res.status(500).json({ message: "Error deleting" });
+          });
+        } else {
+          res.status(400).json({message: "You can not delete this Recipe"})
+        }
     })
     .catch((err) => {
-      res.status(500).json({ message: "Error deleting" });
+      res.status(500).json({ message: "error" });
     });
+
+
+
+  
 });
 
 router.put("/:id", (req, res) => {

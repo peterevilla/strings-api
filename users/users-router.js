@@ -6,9 +6,9 @@ const restricted = require("../auth/aunthenticate-middleware");
 router.get("/", restricted, (req, res) => {
   Users.find()
     .then(users => {
-      res.json(users);
+      res.status(200).json(users);
     })
-    .catch(err => res.send(err));
+    .catch(err =>{res.status(500).json({message: "Could not get users"})});
 });
 
 router.get('/:id/recipes', restricted, (req, res) => {

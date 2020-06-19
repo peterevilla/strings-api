@@ -26,7 +26,7 @@ router.post("/register", validation, (req, res) => {
   } else {
     res.status(400).json({
       message:
-        "please provide username and password and the password shoud be alphanumeric",
+        "please provide username and password and the password should be alphanumeric",
     });
   }
 });
@@ -56,7 +56,7 @@ router.post("/login", validation, (req, res) => {
   } else {
     res.status(400).json({
       message:
-        "please provide username and password and the password shoud be alphanumeric",
+        "please provide username and password and the password should be alphanumeric",
     });
   }
 });
