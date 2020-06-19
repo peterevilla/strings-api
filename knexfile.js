@@ -1,5 +1,5 @@
 // Update with your config settings.
-
+require('dotenv').config();
 module.exports = {
 
   development: {
@@ -38,12 +38,16 @@ module.exports = {
   production: {
     client: 'pg',
     connection: process.env.DB_URL,
+    useNullAsDefault: true,
     pool: {
       min: 2,
       max: 100
     },
     migrations: {
       tableName: './database/migrations'
+    },
+    seeds: {
+      directory: './database/seeds'
     }
   }
 
