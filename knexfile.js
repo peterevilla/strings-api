@@ -20,12 +20,14 @@ module.exports = {
 },
   
   production: {
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
+    client: 'sqlite3',
+    connection: {
+      filename: './database/recipes.db3'
+    },
     useNullAsDefault: true,
     pool: {
       min: 2,
-      max: 100
+      max: 10
     },
     migrations: {
       tableName: './database/migrations'
