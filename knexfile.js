@@ -21,8 +21,8 @@ module.exports = {
 },
   
 production: {
-  client: 'sqlite3',
-  connection: {filename: './database/recipes.db3'},
+  client: 'pg',
+  connection: pgConnection,
   pool: {
       afterCreate: (conn, done) => {
       conn.run("PRAGMA foreign_keys = ON", done);
