@@ -31,6 +31,5 @@ production: {
   seeds: {
     directory: "./database/seeds",
   }
-}
 
 }
