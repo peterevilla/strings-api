@@ -21,6 +21,7 @@ router.get("/", (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(err)
       res.status(500).json({ message: "Error retrieving data" });
     });
 });

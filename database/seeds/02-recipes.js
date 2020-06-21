@@ -40,6 +40,16 @@ exports.seed = function(knex) {
          img_url: 'https://images.pexels.com/photos/1392585/pexels-photo-1392585.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
          user_id: 2,
          private: true
+        },
+        {
+          title: "Family Guacamole Toast",
+          ingredients: "Avocado, tomato, cilantro, green pepper, onions, lime",
+          instructions: "When a went to Mexico i learned this recipe from a host family, cut all vegetables and mix with the avocado. Put some lime to keep it fresh ",
+          category: "Mexicam",
+          source: "Host Family",
+          img_url: "https://images.pexels.com/photos/3535380/pexels-photo-3535380.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+          user_id: 2,
+          private: 0
         }
 
 
