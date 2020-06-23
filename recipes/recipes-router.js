@@ -9,12 +9,12 @@ router.get("/", (req, res) => {
   Recipes.find()
     .then((recipes) => {
       if (!userId) {
-        const publicRecipes = recipes.filter((recipe) => recipe.private !== 1);
-        res.json(publicRecipes);
+        const publicRecipes = recipes.filter((recipe) => recipe.private != 1);
+        res.status(200).json(publicRecipes);
       } else {
-        const publicRecipes = recipes.filter((recipe) => recipe.private !== 1);
+        const publicRecipes = recipes.filter((recipe) => recipe.private != 1);
         const privateRecipes = recipes.filter((recipe) => {
-          return recipe.user_id === Number(userId) && recipe.private === 1;
+          return recipe.user_id === Number(userId) && recipe.private == 1;
         });
         const allRecipes = [...publicRecipes, ...privateRecipes];
         res.json(allRecipes);
