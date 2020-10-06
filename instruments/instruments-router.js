@@ -1,24 +1,12 @@
 const express = require("express");
-const Recipes = require("./recipes-model");
+const Recipes = require("./instruments-model");
 const router = express.Router();
 
 //GET ALL RECIPES
 router.get("/", (req, res) => {
-  const userId = req.headers.user_id;
-  console.log(userId);
   Recipes.find()
-    .then((recipes) => {
-      if (!userId) {
-        const publicRecipes = recipes.filter((recipe) => recipe.private != 1);
-        res.status(200).json(publicRecipes);
-      } else {
-        const publicRecipes = recipes.filter((recipe) => recipe.private != 1);
-        const privateRecipes = recipes.filter((recipe) => {
-          return recipe.user_id === Number(userId) && recipe.private == 1;
-        });
-        const allRecipes = [...publicRecipes, ...privateRecipes];
-        res.json(allRecipes);
-      }
+    .then((instruments) => {
+        res.status(200).json(instruments);
     })
     .catch((err) => {
       console.log(err)
@@ -29,8 +17,8 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   const { id } = req.params;
   Recipes.findById(id)
-    .then((recipe) => {
-      res.status(201).json(recipe);
+    .then((instrument) => {
+      res.status(201).json(instrument);
     })
     .catch((err) => {
       res.status(500).json({ message: "error" });
@@ -41,8 +29,8 @@ router.post("/", (req, res) => {
     const userId = req.headers.user_id;
     const body = {...req.body, user_id: userId }
   Recipes.add(body)
-    .then((recipe) => {
-      res.status(201).json({ message: "New recipe Added!", recipe });
+    .then((instrument) => {
+      res.status(201).json({ message: "New instrument Added!", instrument });
     })
     .catch((err) => {
       console.log(err);
@@ -54,11 +42,11 @@ router.delete("/:id", (req, res) => {
   const { id } = req.params;
   const userId = req.headers.user_id;
   Recipes.findById(id)
-    .then((recipe) => {
-        if(recipe.user_id === Number(userId)) {
+    .then((instrument) => {
+        if(instrument.user_id === Number(userId)) {
           Recipes.remove(req.params.id)
-          .then((recipe) => {
-            res.status(201).json({ message: "Recipe was deleted" });
+          .then((instrument) => {
+            res.status(201).json({ message: "Instrument was deleted" });
           })
           .catch((err) => {
             res.status(500).json({ message: "Error deleting" });
@@ -83,19 +71,19 @@ router.put("/:id", (req, res) => {
   Recipes.update(id, body)
     .then((response) => {
       Recipes.findById(id)
-        .then((recipe) => {
+        .then((instrument) => {
           res
             .status(200)
-            .json({ message: "Recipe successfully updated", recipe });
+            .json({ message: "Recipe successfully updated", instrument });
         })
         .catch((err) => {
           res
             .status(404)
-            .json({ message: "An recipe with that id does not exist" });
+            .json({ message: "An instrument with that id does not exist" });
         });
     })
     .catch((err) => {
-      res.status(500).json({ message: "Could not update recipe" });
+      res.status(500).json({ message: "Could not update instrument" });
     });
 });
 

@@ -3,10 +3,8 @@ const helmet = require("helmet");
 const cors = require("cors");
 
 
-const authRouter = require('../auth/auth-router.js');
-// const authRouter = require("./auth/auth-router");
-const usersRouter = require("../users/users-router");
-const recipesRouter = require("../recipes/recipes-router");
+const instrumentsRouter = require("../instruments/instruments-router");
+const categoriesRouter = require("../categories/categories-router");
 
 const server = express();
 
@@ -14,10 +12,8 @@ server.use(helmet());
 server.use(express.json());
 server.use(cors());
 
-
-server.use("/api/auth", authRouter);
-server.use("/api/users", usersRouter);
-server.use("/api/recipes", recipesRouter);
+server.use("/api/instruments", instrumentsRouter);
+server.use("/api/categories", categoriesRouter);
 
 server.get('/', (req, res) => {
     res.status(200).json({ api: 'UP'})

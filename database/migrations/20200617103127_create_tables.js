@@ -1,30 +1,27 @@
 
 exports.up = function(knex) {
     return knex.schema
-    .createTable("users", tbl => {
+    .createTable("categories", tbl => {
       tbl.increments();
        
-      tbl.text("name", 256).notNullable();
-      tbl.string("username", 128).notNullable().unique().index();
-      tbl.string("password", 256).notNullable();
+      tbl.text("name", 256).notNullable().unique();
       
     })
-    .createTable("recipes", tbl => {
+    .createTable("instruments", tbl => {
 
         tbl.increments();
 
-        tbl.string("title", 256).notNullable();
-        tbl.text("ingredients").notNullable();
-        tbl.text("instructions").notNullable();
-        tbl.string("category", 128).notNullable();
-        tbl.string("source", 128).notNullable();
+        tbl.string("name", 256).notNullable();
+        tbl.text("description").notNullable();
+        tbl.text("features").notNullable();
+        tbl.string("make", 128).notNullable();
+        tbl.integer("price", 128).notNullable();
         tbl.text("img_url");
-        tbl.boolean("private").notNullable().defaultTo(false);
-        tbl.integer("user_id", 128)
+        tbl.integer("category_id", 128)
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('users')
+        .inTable('categories')
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
 
@@ -33,6 +30,6 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
     return knex.schema
-    .dropTableIfExists('recipes')
-    .dropTableIfExists('users');
+    .dropTableIfExists('instruments')
+    .dropTableIfExists('categories');
 };
